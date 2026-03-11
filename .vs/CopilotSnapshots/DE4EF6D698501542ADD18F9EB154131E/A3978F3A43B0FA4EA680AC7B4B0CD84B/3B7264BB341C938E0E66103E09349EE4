@@ -1,0 +1,29 @@
+﻿using System;
+
+namespace FootbolLigasORM.DAL.Entities
+{
+    public class Players
+    {
+        // Primary key
+        public int Id { get; set; }
+
+        // Player names
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+
+        // Date of birth
+        public DateTime BirthDate { get; set; }
+
+        // Playing position (e.g., Goalkeeper, Defender, Midfielder, Forward)
+        public string Position { get; set; } = string.Empty;
+
+        // Squad shirt number
+        public int JerseyNumber { get; set; }
+        // Count of goals scored by the player
+        public int CountOfGoals { get; set; }
+
+        // Relationship to club: each player belongs to one club
+        public int ClubId { get; set; }
+        public Clubs? Club { get; set; }
+    }
+}

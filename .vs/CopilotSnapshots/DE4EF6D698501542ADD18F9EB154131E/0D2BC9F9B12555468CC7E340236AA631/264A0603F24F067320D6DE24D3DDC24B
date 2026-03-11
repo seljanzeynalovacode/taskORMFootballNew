@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace FootbolLigasORM.DAL.Entities
+{
+    public class Clubs
+    {
+        // Primary key
+        public int Id { get; set; }
+
+        // Club name
+        public string Name { get; set; } = string.Empty;
+
+        // Year or date when the club was founded
+        public DateTime Founded { get; set; }
+
+        // City where the club is based
+        public string City { get; set; } = string.Empty;
+
+        // Current head coach/manager
+        public string Manager { get; set; } = string.Empty;
+
+        // Performance of the club
+        public int PerformanceRate { get; set; }
+
+        // Navigation property: a club can have one or more stadiums
+        public List<Stadiums> Stadiums { get; set; } = new();
+    }
+}

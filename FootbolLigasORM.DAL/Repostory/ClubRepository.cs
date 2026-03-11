@@ -1,0 +1,77 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using FootbolLigasORM.DAL.Context;
+using FootbolLigasORM.DAL.Entities;
+
+namespace FootbolLigasORM.DAL.Repostory
+{
+    public class ClubRepository
+    {
+        private readonly AppDbContext _context;
+
+        public ClubRepository(AppDbContext context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+
+        // Get all clubs with related players and main stadium
+        public async Task<List<Clubs>> GetAllAsync()
+        {
+            return await _context.Clubs
+                .Include(c => c.Players)
+                .Include(c => c.MainStadium)
+                .ToListAsync();
+        }
+
+        // Get single club by id
+        public async Task<Clubs?> GetByIdAsync(int id)
+        {
+            return await _context.Clubs
+                .Include(c => c.Players)
+                .Include(c => c.MainStadium)
+                .FirstOrDefaultAsync(c => c.Id == id);
+        }
+
+        // Create new club
+        public async Task<Clubs> CreateAsync(Clubs club)
+        {
+            if (club == null) throw new ArgumentNullException(nameof(club));
+
+            _context.Clubs.Add(club);
+            await _context.SaveChangesAsync();
+            return club;
+        }
+
+        // Update existing club; returns false if not found
+        public async Task<bool> UpdateAsync(Clubs club)
+        {
+            if (club == null) throw new ArgumentNullException(nameof(club));
+
+            var exists = await _context.Clubs.AnyAsync(c => c.Id == club.Id);
+            if (!exists) return false;
+
+            _context.Clubs.Update(club);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // Delete club by id; returns false if not found
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var club = await _context.Clubs.FindAsync(id);
+            if (club == null) return false;
+
+            _context.Clubs.Remove(club);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        // Check existence
+        public async Task<bool> ExistsAsync(int id)
+        {
+            return await _context.Clubs.AnyAsync(c => c.Id == id);
+        }
+    }
+}

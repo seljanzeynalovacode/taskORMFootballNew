@@ -1,0 +1,31 @@
+﻿using System;
+
+namespace FootbolLigasORM.DAL.Entities
+{
+    public class Clubs
+    {
+        // Primary key
+        public int Id { get; set; }
+
+        // Club name
+        public string Name { get; set; } = string.Empty;
+
+        // Year or date when the club was founded
+        public DateTime Founded { get; set; }
+
+        // Home stadium name
+        public string Stadium { get; set; } = string.Empty;
+
+        // City where the club is based
+        public string City { get; set; } = string.Empty;
+
+        // Current head coach/manager
+        public string Coach { get; set; } = string.Empty;
+
+        // Stadium capacity
+        public int Capacity { get; set; }
+
+        // Optional website or contact URL
+        public string? Website { get; set; }
+    }
+}

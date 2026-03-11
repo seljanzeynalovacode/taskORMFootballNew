@@ -1,0 +1,18 @@
+﻿using System;
+
+namespace FootbolLigasORM.DAL.Entities
+{
+    public abstract class BaseEntity
+    {
+        // Primary key shared by all entities
+        public int Id { get; set; }
+
+        // Timestamps for auditing
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime? UpdatedAt { get; set; }
+
+        // Soft-delete and active flags
+        public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; } = false;
+    }
+}

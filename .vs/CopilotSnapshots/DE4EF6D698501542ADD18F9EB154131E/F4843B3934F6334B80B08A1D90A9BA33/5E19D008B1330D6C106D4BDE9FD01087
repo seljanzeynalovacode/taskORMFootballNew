@@ -1,0 +1,34 @@
+﻿using System;
+
+namespace FootbolLigasORM.DAL.Entities
+{
+    public class Stadiums
+    {
+        // Primary key
+        public int Id { get; set; }
+
+        // Stadium name
+        public string Name { get; set; } = string.Empty;
+
+        // City where the stadium is located
+        public string City { get; set; } = string.Empty;
+
+        // Full address
+        public string Address { get; set; } = string.Empty;
+
+        // Seating capacity
+        public int Capacity { get; set; }
+
+        // Date when the stadium was opened
+        public DateTime Opened { get; set; }
+
+        // Playing surface (e.g., Natural Grass, Artificial)
+        public string SurfaceType { get; set; } = string.Empty;
+
+        // Optional reference to the home club
+        public int? HomeClubId { get; set; }
+
+        // Navigation property (optional)
+        public Clubs? HomeClub { get; set; }
+    }
+}

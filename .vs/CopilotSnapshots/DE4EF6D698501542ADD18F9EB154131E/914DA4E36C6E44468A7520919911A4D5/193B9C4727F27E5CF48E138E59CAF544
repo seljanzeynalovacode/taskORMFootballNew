@@ -1,0 +1,29 @@
+﻿using System;
+using FootbolLigasORM.DAL.Entities;
+
+namespace FootbolLigasORM.DAL.Entities
+{
+    public class Matches : BaseEntity
+    {
+        //Title of the match 
+        public string Title { get; set; } = string.Empty;
+
+        // When the match takes place
+        public DateTime MatchDate { get; set; }
+
+        // Home and away clubs
+        public int FirstClubId { get; set; }
+        public Clubs? FirstClub { get; set; }
+
+        public int SecondClubId { get; set; }
+        public Clubs? SecondClub { get; set; }
+
+        // Stadium where the match is played
+        public int? StadiumId { get; set; }
+        public Stadiums? Stadium { get; set; }
+
+        // Scores (nullable until match is played)
+        public int? HomeScore { get; set; }
+        public int? AwayScore { get; set; }
+    }
+}

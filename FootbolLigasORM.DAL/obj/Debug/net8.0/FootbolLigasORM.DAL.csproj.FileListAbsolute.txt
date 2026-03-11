@@ -1,0 +1,14 @@
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\bin\Debug\net8.0\FootbolLigasORM.DAL.deps.json
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\bin\Debug\net8.0\FootbolLigasORM.DAL.runtimeconfig.json
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\bin\Debug\net8.0\FootbolLigasORM.DAL.dll
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\bin\Debug\net8.0\FootbolLigasORM.DAL.pdb
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.csproj.AssemblyReference.cache
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.AssemblyInfoInputs.cache
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.AssemblyInfo.cs
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.csproj.CoreCompileInputs.cache
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.dll
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\refint\FootbolLigasORM.DAL.dll
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.pdb
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.genruntimeconfig.cache
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\ref\FootbolLigasORM.DAL.dll
