@@ -12,3 +12,4 @@ C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj
 C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.pdb
 C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.genruntimeconfig.cache
 C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\ref\FootbolLigasORM.DAL.dll
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.DAL\obj\Debug\net8.0\FootbolLigasORM.DAL.sourcelink.json

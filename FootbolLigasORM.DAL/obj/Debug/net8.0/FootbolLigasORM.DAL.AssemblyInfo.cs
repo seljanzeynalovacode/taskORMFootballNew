@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FootbolLigasORM.DAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+16638d48bce3e1ceec45deff1f207673860f8e43")]
 [assembly: System.Reflection.AssemblyProductAttribute("FootbolLigasORM.DAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FootbolLigasORM.DAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

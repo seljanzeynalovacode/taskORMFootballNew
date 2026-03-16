@@ -1,0 +1,16 @@
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\bin\Debug\net8.0\FootbolLigasORM.BLL.deps.json
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\bin\Debug\net8.0\FootbolLigasORM.BLL.dll
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\bin\Debug\net8.0\FootbolLigasORM.BLL.pdb
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\bin\Debug\net8.0\FootbolLigasORM.DAL.dll
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\bin\Debug\net8.0\FootbolLigasORM.DAL.pdb
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\FootbolLigasORM.BLL.csproj.AssemblyReference.cache
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\FootbolLigasORM.BLL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\FootbolLigasORM.BLL.AssemblyInfoInputs.cache
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\FootbolLigasORM.BLL.AssemblyInfo.cs
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\FootbolLigasORM.BLL.csproj.CoreCompileInputs.cache
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\FootbolLigasORM.BLL.sourcelink.json
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\FootbolL.D06A4878.Up2Date
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\FootbolLigasORM.BLL.dll
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\refint\FootbolLigasORM.BLL.dll
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\FootbolLigasORM.BLL.pdb
+C:\Users\ACER\Desktop\FutbolORM_Hometask\FootbolLigasORM\FootbolLigasORM.BLL\obj\Debug\net8.0\ref\FootbolLigasORM.BLL.dll

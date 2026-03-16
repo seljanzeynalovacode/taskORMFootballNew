@@ -1,0 +1,430 @@
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using FootbolLigasORM.DAL.Context;
+using FootbolLigasORM.DAL.Entities;
+
+namespace FootbolLigasORM.UI
+{
+    public class MenuOperation
+    {
+        private readonly AppDbContext _context;
+
+        public MenuOperation()
+        {
+            _context = new AppDbContext();
+        }
+
+        public void Run()
+        {
+            while (true)
+            {
+                Console.WriteLine();
+                Console.WriteLine("======== Football League Menu ========");
+                Console.WriteLine("1. List clubs");
+                Console.WriteLine("2. Add club");
+                Console.WriteLine("3. Update club");
+                Console.WriteLine("4. Delete club");
+                Console.WriteLine("5. List players");
+                Console.WriteLine("6. Add player");
+                Console.WriteLine("7. Update player");
+                Console.WriteLine("8. Delete player");
+                Console.WriteLine("9. List matches");
+                Console.WriteLine("10. Add match");
+                Console.WriteLine("11. Update match");
+                Console.WriteLine("12. Delete match");
+                Console.WriteLine("13. Score table");
+                Console.WriteLine("14. Clubs with most goals");
+                Console.WriteLine("15. Players with most goals");
+                Console.WriteLine("16. Add goal");
+                Console.WriteLine("0. Exit");
+                Console.Write("Select an option: ");
+
+                var input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1": ShowClubs(); break;
+                    case "2": AddClub(); break;
+                    case "3": UpdateClub(); break;
+                    case "4": DeleteClub(); break;
+                    case "5": ShowPlayers(); break;
+                    case "6": AddPlayer(); break;
+                    case "7": UpdatePlayer(); break;
+                    case "8": DeletePlayer(); break;
+                    case "9": ShowMatches(); break;
+                    case "10": AddMatch(); break;
+                    case "11": UpdateMatch(); break;
+                    case "12": DeleteMatch(); break;
+                    case "13": ShowScoreTable(); break;
+                    case "14": ShowClubsMostGoals(); break;
+                    case "15": ShowPlayersMostGoals(); break;
+                    case "16": AddGoal(); break;
+                    case "0": return;
+                    default:
+                        Console.WriteLine("Invalid option.");
+                        break;
+                }
+            }
+        }
+
+        private void AddClub()
+        {
+            var club = new Clubs();
+            Console.Write("Name: "); club.Name = Console.ReadLine() ?? string.Empty;
+            Console.Write("City: "); club.City = Console.ReadLine() ?? string.Empty;
+            Console.Write("Founded (yyyy): ");
+            if (int.TryParse(Console.ReadLine(), out var year)) club.Founded = new DateTime(year,1,1);
+            else club.Founded = DateTime.UtcNow;
+            Console.Write("Manager: "); club.Manager = Console.ReadLine() ?? string.Empty;
+            Console.Write("Performance rate (0-100): "); if (int.TryParse(Console.ReadLine(), out var perf)) club.PerformanceRate = perf;
+
+            _context.Clubs.Add(club);
+            _context.SaveChanges();
+            Console.WriteLine($"Created club with id {club.Id}.");
+        }
+
+        private void UpdateClub()
+        {
+            Console.Write("Enter club id to update: ");
+            if (!int.TryParse(Console.ReadLine(), out var id)) { Console.WriteLine("Invalid id."); return; }
+            var club = _context.Clubs.Find(id);
+            if (club == null) { Console.WriteLine("Club not found."); return; }
+
+            Console.Write($"Name ({club.Name}): "); var name = Console.ReadLine(); if (!string.IsNullOrWhiteSpace(name)) club.Name = name;
+            Console.Write($"City ({club.City}): "); var city = Console.ReadLine(); if (!string.IsNullOrWhiteSpace(city)) club.City = city;
+            Console.Write($"Manager ({club.Manager}): "); var manager = Console.ReadLine(); if (!string.IsNullOrWhiteSpace(manager)) club.Manager = manager;
+            Console.Write($"Performance ({club.PerformanceRate}): "); var perfInput = Console.ReadLine(); if (int.TryParse(perfInput, out var perf)) club.PerformanceRate = perf;
+
+            _context.Clubs.Update(club);
+            _context.SaveChanges();
+            Console.WriteLine("Club updated.");
+        }
+
+        private void DeleteClub()
+        {
+            Console.Write("Enter club id to delete: ");
+            if (!int.TryParse(Console.ReadLine(), out var id)) { Console.WriteLine("Invalid id."); return; }
+            var club = _context.Clubs.Find(id);
+            if (club == null) { Console.WriteLine("Club not found."); return; }
+
+            // optional: check related data
+            _context.Clubs.Remove(club);
+            _context.SaveChanges();
+            Console.WriteLine("Club deleted.");
+        }
+
+        private void ShowPlayers()
+        {
+            var players = _context.Players.ToList();
+            if (!players.Any()) { Console.WriteLine("No players found."); return; }
+            Console.WriteLine("Players:");
+            foreach (var p in players)
+            {
+                var clubName = _context.Clubs.Find(p.ClubId)?.Name ?? "-";
+                Console.WriteLine($"{p.Id}. {p.FirstName} {p.LastName} | Club: {clubName} | Pos: {p.Position} | Jersey: {p.JerseyNumber} | Goals: {p.CountOfGoals}");
+            }
+        }
+
+        private void AddPlayer()
+        {
+            var player = new Players();
+            Console.Write("First name: "); player.FirstName = Console.ReadLine() ?? string.Empty;
+            Console.Write("Last name: "); player.LastName = Console.ReadLine() ?? string.Empty;
+            Console.Write("Birth year (yyyy): "); if (int.TryParse(Console.ReadLine(), out var by)) player.BirthDate = new DateTime(by,1,1); else player.BirthDate = DateTime.UtcNow;
+            Console.Write("Position: "); player.Position = Console.ReadLine() ?? string.Empty;
+            Console.Write("Jersey number: "); if (int.TryParse(Console.ReadLine(), out var jn)) player.JerseyNumber = jn;
+            Console.Write("Club id: "); if (int.TryParse(Console.ReadLine(), out var cid)) player.ClubId = cid;
+
+            _context.Players.Add(player);
+            _context.SaveChanges();
+            Console.WriteLine($"Created player with id {player.Id}.");
+        }
+
+        private void UpdatePlayer()
+        {
+            Console.Write("Enter player id to update: "); if (!int.TryParse(Console.ReadLine(), out var id)) { Console.WriteLine("Invalid id."); return; }
+            var p = _context.Players.Find(id); if (p == null) { Console.WriteLine("Player not found."); return; }
+
+            Console.Write($"First name ({p.FirstName}): "); var fn = Console.ReadLine(); if (!string.IsNullOrWhiteSpace(fn)) p.FirstName = fn;
+            Console.Write($"Last name ({p.LastName}): "); var ln = Console.ReadLine(); if (!string.IsNullOrWhiteSpace(ln)) p.LastName = ln;
+            Console.Write($"Position ({p.Position}): "); var pos = Console.ReadLine(); if (!string.IsNullOrWhiteSpace(pos)) p.Position = pos;
+            Console.Write($"Jersey ({p.JerseyNumber}): "); var jnInput = Console.ReadLine(); if (int.TryParse(jnInput, out var jn)) p.JerseyNumber = jn;
+            Console.Write($"Club id ({p.ClubId}): "); var cidInput = Console.ReadLine(); if (int.TryParse(cidInput, out var cid)) p.ClubId = cid;
+
+            _context.Players.Update(p);
+            _context.SaveChanges();
+            Console.WriteLine("Player updated.");
+        }
+
+        private void DeletePlayer()
+        {
+            Console.Write("Enter player id to delete: "); if (!int.TryParse(Console.ReadLine(), out var id)) { Console.WriteLine("Invalid id."); return; }
+            var p = _context.Players.Find(id); if (p == null) { Console.WriteLine("Player not found."); return; }
+            _context.Players.Remove(p); _context.SaveChanges(); Console.WriteLine("Player deleted.");
+        }
+
+        private void AddMatch()
+        {
+            var match = new Matches();
+            Console.Write("Title: "); match.Title = Console.ReadLine() ?? string.Empty;
+            Console.Write("Date (yyyy-MM-dd): "); if (DateTime.TryParse(Console.ReadLine(), out var dt)) match.MatchDate = dt; else match.MatchDate = DateTime.UtcNow;
+            Console.Write("First club id: "); if (int.TryParse(Console.ReadLine(), out var fcid)) match.FirstClubId = fcid;
+            Console.Write("Second club id: "); if (int.TryParse(Console.ReadLine(), out var scid)) match.SecondClubId = scid;
+            Console.Write("Stadium id (optional): "); if (int.TryParse(Console.ReadLine(), out var sid)) match.StadiumId = sid; else match.StadiumId = null;
+            Console.Write("Home score (blank if not played): "); var hs = Console.ReadLine(); if (int.TryParse(hs, out var hscore)) match.HomeScore = hscore;
+            Console.Write("Away score (blank if not played): "); var ascr = Console.ReadLine(); if (int.TryParse(ascr, out var ascore)) match.AwayScore = ascore;
+
+            _context.Matches.Add(match);
+            _context.SaveChanges();
+            Console.WriteLine($"Created match with id {match.Id}.");
+        }
+
+        private void UpdateMatch()
+        {
+            Console.Write("Enter match id to update: "); if (!int.TryParse(Console.ReadLine(), out var id)) { Console.WriteLine("Invalid id."); return; }
+            var m = _context.Matches.Find(id); if (m == null) { Console.WriteLine("Match not found."); return; }
+
+            Console.Write($"Title ({m.Title}): "); var t = Console.ReadLine(); if (!string.IsNullOrWhiteSpace(t)) m.Title = t;
+            Console.Write($"Date ({m.MatchDate:yyyy-MM-dd}): "); var dtin = Console.ReadLine(); if (DateTime.TryParse(dtin, out var dt)) m.MatchDate = dt;
+            Console.Write($"First club id ({m.FirstClubId}): "); var fcin = Console.ReadLine(); if (int.TryParse(fcin, out var fcid)) m.FirstClubId = fcid;
+            Console.Write($"Second club id ({m.SecondClubId}): "); var scin = Console.ReadLine(); if (int.TryParse(scin, out var scid)) m.SecondClubId = scid;
+            Console.Write($"Stadium id ({m.StadiumId}): "); var sin = Console.ReadLine(); if (int.TryParse(sin, out var sid)) m.StadiumId = sid;
+            Console.Write($"Home score ({m.HomeScore}): "); var hs = Console.ReadLine(); if (int.TryParse(hs, out var hscore)) m.HomeScore = hscore; else m.HomeScore = null;
+            Console.Write($"Away score ({m.AwayScore}): "); var ascr = Console.ReadLine(); if (int.TryParse(ascr, out var ascore)) m.AwayScore = ascore; else m.AwayScore = null;
+
+            _context.Matches.Update(m);
+            _context.SaveChanges();
+            Console.WriteLine("Match updated.");
+        }
+
+        private void DeleteMatch()
+        {
+            Console.Write("Enter match id to delete: "); if (!int.TryParse(Console.ReadLine(), out var id)) { Console.WriteLine("Invalid id."); return; }
+            var m = _context.Matches.Find(id); if (m == null) { Console.WriteLine("Match not found."); return; }
+            _context.Matches.Remove(m); _context.SaveChanges(); Console.WriteLine("Match deleted.");
+        }
+
+        private void ShowClubs()
+        {
+            var clubs = _context.Clubs.ToList();
+            if (!clubs.Any())
+            {
+                Console.WriteLine("No clubs found.");
+                return;
+            }
+
+            Console.WriteLine("Clubs:");
+            foreach (var c in clubs)
+            {
+                Console.WriteLine($"{c.Id}. {c.Name} | City: {c.City} | Founded: {c.Founded:yyyy} | Manager: {c.Manager} | Performance: {c.PerformanceRate}");
+            }
+        }
+
+        private void ShowScoreTable()
+        {
+            var clubs = _context.Clubs.ToList();
+            var matches = _context.Matches
+                .Where(m => m.HomeScore.HasValue && m.AwayScore.HasValue)
+                .ToList();
+
+            if (!clubs.Any())
+            {
+                Console.WriteLine("No clubs to build table.");
+                return;
+            }
+
+            var stats = clubs.ToDictionary(c => c.Id, c => new ScoreStats { Club = c });
+
+            foreach (var m in matches)
+            {
+                if (!stats.ContainsKey(m.FirstClubId) || !stats.ContainsKey(m.SecondClubId))
+                    continue;
+
+                var home = stats[m.FirstClubId];
+                var away = stats[m.SecondClubId];
+
+                int hs = m.HomeScore ??0;
+                int ascore = m.AwayScore ??0;
+
+                home.Played++;
+                away.Played++;
+
+                home.GoalsFor += hs;
+                home.GoalsAgainst += ascore;
+
+                away.GoalsFor += ascore;
+                away.GoalsAgainst += hs;
+
+                if (hs > ascore)
+                {
+                    home.Wins++; home.Points +=3;
+                    away.Losses++;
+                }
+                else if (hs < ascore)
+                {
+                    away.Wins++; away.Points +=3;
+                    home.Losses++;
+                }
+                else
+                {
+                    home.Draws++; home.Points +=1;
+                    away.Draws++; away.Points +=1;
+                }
+            }
+
+            var ordered = stats.Values
+                .OrderByDescending(s => s.Points)
+                .ThenByDescending(s => s.GoalDifference)
+                .ThenByDescending(s => s.GoalsFor)
+                .ToList();
+
+            Console.WriteLine("Pos | Club - P | W | D | L | GF | GA | GD | Pts");
+            for (int i =0; i < ordered.Count; i++)
+            {
+                var s = ordered[i];
+                Console.WriteLine($"{i +1,3} | {s.Club.Name} - {s.Played,2} | {s.Wins,1} | {s.Draws,1} | {s.Losses,1} | {s.GoalsFor,2} | {s.GoalsAgainst,2} | {s.GoalDifference,3} | {s.Points,3}");
+            }
+        }
+
+        private void ShowMatches()
+        {
+            var matches = _context.Matches.ToList();
+            if (!matches.Any())
+            {
+                Console.WriteLine("No matches found.");
+                return;
+            }
+
+            foreach (var m in matches.OrderBy(m => m.MatchDate))
+            {
+                var first = _context.Clubs.Find(m.FirstClubId)?.Name ?? "Unknown";
+                var second = _context.Clubs.Find(m.SecondClubId)?.Name ?? "Unknown";
+                var stadium = m.StadiumId.HasValue ? _context.Stadiums.Find(m.StadiumId.Value)?.Name : null;
+                var score = (m.HomeScore.HasValue && m.AwayScore.HasValue) ? $"{m.HomeScore}:{m.AwayScore}" : "-:-";
+                Console.WriteLine($"{m.Id}. {m.MatchDate:yyyy-MM-dd} | {first} vs {second} | Score: {score} | Stadium: {stadium}");
+            }
+        }
+
+        private void ShowStadiums()
+        {
+            var stadiums = _context.Stadiums.ToList();
+            if (!stadiums.Any())
+            {
+                Console.WriteLine("No stadiums found.");
+                return;
+            }
+
+            foreach (var s in stadiums)
+            {
+                var clubName = s.ClubId.HasValue ? _context.Clubs.Find(s.ClubId.Value)?.Name : null;
+                Console.WriteLine($"{s.Id}. {s.Name} | City: {s.City} | Capacity: {s.Capacity} | Surface: {s.SurfaceType} | Club: {clubName}");
+            }
+        }
+
+        private void ShowGoals()
+        {
+            var goals = _context.Goals.ToList();
+            if (!goals.Any())
+            {
+                Console.WriteLine("No goals recorded.");
+                return;
+            }
+
+            foreach (var g in goals.OrderBy(g => g.Minute))
+            {
+                var match = _context.Matches.Find(g.MatchId);
+                var matchInfo = match != null ? $"{match.MatchDate:yyyy-MM-dd} ({match.Id})" : "Unknown match";
+                var scorer = _context.Players.Find(g.ScorerId)?.FirstName + " " + _context.Players.Find(g.ScorerId)?.LastName;
+                var club = _context.Clubs.Find(g.ClubId)?.Name ?? "Unknown club";
+                var assist = g.AssistById.HasValue ? _context.Players.Find(g.AssistById.Value)?.FirstName + " " + _context.Players.Find(g.AssistById.Value)?.LastName : null;
+                Console.WriteLine($"{g.Id}. Match: {matchInfo} | Minute: {g.Minute} | Scorer: {scorer} | Club: {club} | Assist: {assist}");
+            }
+        }
+
+        private void ShowClubsMostGoals()
+        {
+            var goals = _context.Goals.ToList();
+            if (!goals.Any())
+            {
+                Console.WriteLine("No goal data.");
+                return;
+            }
+
+            var grouped = goals.GroupBy(g => g.ClubId)
+                .Select(g => new { ClubId = g.Key, Goals = g.Count() })
+                .OrderByDescending(x => x.Goals)
+                .ToList();
+
+            Console.WriteLine("Clubs by goals:");
+            foreach (var g in grouped)
+            {
+                var clubName = _context.Clubs.Find(g.ClubId)?.Name ?? "Unknown";
+                Console.WriteLine($"{clubName} - {g.Goals}");
+            }
+        }
+
+        private void ShowPlayersMostGoals()
+        {
+            var goals = _context.Goals.ToList();
+            if (!goals.Any())
+            {
+                Console.WriteLine("No goal data.");
+                return;
+            }
+
+            var grouped = goals.Where(g => g.ScorerId >0)
+                .GroupBy(g => g.ScorerId)
+                .Select(g => new { PlayerId = g.Key, Goals = g.Count() })
+                .OrderByDescending(x => x.Goals)
+                .ToList();
+
+            Console.WriteLine("Top scorers:");
+            foreach (var g in grouped)
+            {
+                var player = _context.Players.Find(g.PlayerId);
+                var name = player != null ? $"{player.FirstName} {player.LastName}" : "Unknown";
+                Console.WriteLine($"{name} - {g.Goals}");
+            }
+        }
+
+        private void AddGoal()
+        {
+            var goal = new Goals();
+            Console.Write("Match ID: "); goal.MatchId = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Scorer ID: "); goal.ScorerId = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Club ID: "); goal.ClubId = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Minute of goal: "); goal.Minute = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Assist by (optional, player ID): "); 
+            if (int.TryParse(Console.ReadLine(), out var assistId)) goal.AssistById = assistId;
+            else goal.AssistById = null;
+
+            _context.Goals.Add(goal);
+
+            // Update player's goal count
+            var player = _context.Players.Find(goal.ScorerId);
+            if (player != null)
+            {
+                player.CountOfGoals++;
+                _context.Players.Update(player);
+            }
+
+            _context.SaveChanges();
+            Console.WriteLine($"Added goal by {goal.ScorerId} in match {goal.MatchId}.");
+        }
+
+        private class ScoreStats
+        {
+            public Clubs Club { get; set; } = null!;
+            public int Played { get; set; }
+            public int Wins { get; set; }
+            public int Draws { get; set; }
+            public int Losses { get; set; }
+            public int GoalsFor { get; set; }
+            public int GoalsAgainst { get; set; }
+            public int Points { get; set; }
+            public int GoalDifference => GoalsFor - GoalsAgainst;
+        }
+    }
+}
+
+

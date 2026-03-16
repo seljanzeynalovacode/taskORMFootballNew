@@ -1,0 +1,263 @@
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
+using FootbolLigasORM.DAL.Context;
+using FootbolLigasORM.DAL.Entities;
+
+namespace FootbolLigasORM.UI
+{
+    public class MenuOperation
+    {
+        private readonly AppDbContext _context;
+
+        public MenuOperation()
+        {
+            _context = new AppDbContext();
+        }
+
+        public void Run()
+        {
+            while (true)
+            {
+                Console.WriteLine();
+                Console.WriteLine("======== Football League Menu ========");
+                Console.WriteLine("1. List clubs");
+                Console.WriteLine("2. Score table");
+                Console.WriteLine("3. List matches");
+                Console.WriteLine("4. List stadiums");
+                Console.WriteLine("5. List goals");
+                Console.WriteLine("6. Clubs with most goals");
+                Console.WriteLine("7. Players with most goals");
+                Console.WriteLine("0. Exit");
+                Console.Write("Select an option: ");
+
+                var input = Console.ReadLine();
+                switch (input)
+                {
+                    case "1": ShowClubs(); break;
+                    case "2": ShowScoreTable(); break;
+                    case "3": ShowMatches(); break;
+                    case "4": ShowStadiums(); break;
+                    case "5": ShowGoals(); break;
+                    case "6": ShowClubsMostGoals(); break;
+                    case "7": ShowPlayersMostGoals(); break;
+                    case "0": return;
+                    default:
+                        Console.WriteLine("Invalid option.");
+                        break;
+                }
+            }
+        }
+
+        private void ShowClubs()
+        {
+            var clubs = _context.Clubs.ToList();
+            if (!clubs.Any())
+            {
+                Console.WriteLine("No clubs found.");
+                return;
+            }
+
+            Console.WriteLine("Clubs:");
+            foreach (var c in clubs)
+            {
+                Console.WriteLine($"{c.Id}. {c.Name} | City: {c.City} | Founded: {c.Founded:yyyy} | Manager: {c.Manager} | Performance: {c.PerformanceRate}");
+            }
+        }
+
+        private void ShowScoreTable()
+        {
+            var clubs = _context.Clubs.ToList();
+            var matches = _context.Matches
+                .Where(m => m.HomeScore.HasValue && m.AwayScore.HasValue)
+                .ToList();
+
+            if (!clubs.Any())
+            {
+                Console.WriteLine("No clubs to build table.");
+                return;
+            }
+
+            var table = clubs.ToDictionary(c => c.Id, c => new
+            {
+                Club = c,
+                Played =0,
+                Wins =0,
+                Draws =0,
+                Losses =0,
+                GoalsFor =0,
+                GoalsAgainst =0,
+                Points =0
+            });
+
+            // Use mutable dictionary to update stats
+            var stats = clubs.ToDictionary(c => c.Id, c => new ScoreStats { Club = c });
+
+            foreach (var m in matches)
+            {
+                if (!stats.ContainsKey(m.FirstClubId) || !stats.ContainsKey(m.SecondClubId))
+                    continue;
+
+                var home = stats[m.FirstClubId];
+                var away = stats[m.SecondClubId];
+
+                int hs = m.HomeScore ??0;
+                int ascore = m.AwayScore ??0;
+
+                home.Played++;
+                away.Played++;
+
+                home.GoalsFor += hs;
+                home.GoalsAgainst += ascore;
+
+                away.GoalsFor += ascore;
+                away.GoalsAgainst += hs;
+
+                if (hs > ascore)
+                {
+                    home.Wins++; home.Points +=3;
+                    away.Losses++;
+                }
+                else if (hs < ascore)
+                {
+                    away.Wins++; away.Points +=3;
+                    home.Losses++;
+                }
+                else
+                {
+                    home.Draws++; home.Points +=1;
+                    away.Draws++; away.Points +=1;
+                }
+            }
+
+            var ordered = stats.Values
+                .OrderByDescending(s => s.Points)
+                .ThenByDescending(s => s.GoalDifference)
+                .ThenByDescending(s => s.GoalsFor)
+                .ToList();
+
+            Console.WriteLine("Pos | Club - P | W | D | L | GF | GA | GD | Pts");
+            for (int i =0; i < ordered.Count; i++)
+            {
+                var s = ordered[i];
+                Console.WriteLine($"{i +1,3} | {s.Club.Name} - {s.Played,2} | {s.Wins,1} | {s.Draws,1} | {s.Losses,1} | {s.GoalsFor,2} | {s.GoalsAgainst,2} | {s.GoalDifference,3} | {s.Points,3}");
+            }
+        }
+
+        private void ShowMatches()
+        {
+            var matches = _context.Matches.ToList();
+            if (!matches.Any())
+            {
+                Console.WriteLine("No matches found.");
+                return;
+            }
+
+            foreach (var m in matches.OrderBy(m => m.MatchDate))
+            {
+                var first = _context.Clubs.Find(m.FirstClubId)?.Name ?? "Unknown";
+                var second = _context.Clubs.Find(m.SecondClubId)?.Name ?? "Unknown";
+                var stadium = m.StadiumId.HasValue ? _context.Stadiums.Find(m.StadiumId.Value)?.Name : null;
+                var score = (m.HomeScore.HasValue && m.AwayScore.HasValue) ? $"{m.HomeScore}:{m.AwayScore}" : "-:-";
+                Console.WriteLine($"{m.Id}. {m.MatchDate:yyyy-MM-dd} | {first} vs {second} | Score: {score} | Stadium: {stadium}");
+            }
+        }
+
+        private void ShowStadiums()
+        {
+            var stadiums = _context.Stadiums.ToList();
+            if (!stadiums.Any())
+            {
+                Console.WriteLine("No stadiums found.");
+                return;
+            }
+
+            foreach (var s in stadiums)
+            {
+                var clubName = s.ClubId.HasValue ? _context.Clubs.Find(s.ClubId.Value)?.Name : null;
+                Console.WriteLine($"{s.Id}. {s.Name} | City: {s.City} | Capacity: {s.Capacity} | Surface: {s.SurfaceType} | Club: {clubName}");
+            }
+        }
+
+        private void ShowGoals()
+        {
+            var goals = _context.Goals.ToList();
+            if (!goals.Any())
+            {
+                Console.WriteLine("No goals recorded.");
+                return;
+            }
+
+            foreach (var g in goals.OrderBy(g => g.Minute))
+            {
+                var match = _context.Matches.Find(g.MatchId);
+                var matchInfo = match != null ? $"{match.MatchDate:yyyy-MM-dd} ({match.Id})" : "Unknown match";
+                var scorer = _context.Players.Find(g.ScorerId)?.FirstName + " " + _context.Players.Find(g.ScorerId)?.LastName;
+                var club = _context.Clubs.Find(g.ClubId)?.Name ?? "Unknown club";
+                var assist = g.AssistById.HasValue ? _context.Players.Find(g.AssistById.Value)?.FirstName + " " + _context.Players.Find(g.AssistById.Value)?.LastName : null;
+                Console.WriteLine($"{g.Id}. Match: {matchInfo} | Minute: {g.Minute} | Scorer: {scorer} | Club: {club} | Assist: {assist}");
+            }
+        }
+
+        private void ShowClubsMostGoals()
+        {
+            var goals = _context.Goals.ToList();
+            if (!goals.Any())
+            {
+                Console.WriteLine("No goal data.");
+                return;
+            }
+
+            var grouped = goals.GroupBy(g => g.ClubId)
+                .Select(g => new { ClubId = g.Key, Goals = g.Count() })
+                .OrderByDescending(x => x.Goals)
+                .ToList();
+
+            Console.WriteLine("Clubs by goals:");
+            foreach (var g in grouped)
+            {
+                var clubName = _context.Clubs.Find(g.ClubId)?.Name ?? "Unknown";
+                Console.WriteLine($"{clubName} - {g.Goals}");
+            }
+        }
+
+        private void ShowPlayersMostGoals()
+        {
+            var goals = _context.Goals.ToList();
+            if (!goals.Any())
+            {
+                Console.WriteLine("No goal data.");
+                return;
+            }
+
+            var grouped = goals.Where(g => g.ScorerId >0)
+                .GroupBy(g => g.ScorerId)
+                .Select(g => new { PlayerId = g.Key, Goals = g.Count() })
+                .OrderByDescending(x => x.Goals)
+                .ToList();
+
+            Console.WriteLine("Top scorers:");
+            foreach (var g in grouped)
+            {
+                var player = _context.Players.Find(g.PlayerId);
+                var name = player != null ? $"{player.FirstName} {player.LastName}" : "Unknown";
+                Console.WriteLine($"{name} - {g.Goals}");
+            }
+        }
+
+        private class ScoreStats
+        {
+            public Clubs Club { get; set; } = null!;
+            public int Played { get; set; }
+            public int Wins { get; set; }
+            public int Draws { get; set; }
+            public int Losses { get; set; }
+            public int GoalsFor { get; set; }
+            public int GoalsAgainst { get; set; }
+            public int Points { get; set; }
+            public int GoalDifference => GoalsFor - GoalsAgainst;
+        }
+    }
+}
+
+

@@ -1,0 +1,17 @@
+﻿using System;
+using System.Linq;
+using FootbolLigasORM.DAL.Context;
+
+using FootbolLigasORM.DAL.Entities;
+
+namespace FootbolLigasORM.UI
+{
+    public class MenuOperation
+    {
+
+
+
+    }
+}
+
+

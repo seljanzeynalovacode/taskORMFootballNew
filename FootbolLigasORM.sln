@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36623.8 d17.14
+VisualStudioVersion = 17.14.36623.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootbolLigasORM.DAL", "FootbolLigasORM.DAL\FootbolLigasORM.DAL.csproj", "{11ACBD5C-728E-485D-BC0A-3B4D6DC389A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootbolLigasORM.UI", "FootbolLigasORM.UI\FootbolLigasORM.UI.csproj", "{9E9E6B00-566C-44FF-A243-CACBC414E2C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FootbolLigasORM.BLL", "FootbolLigasORM.BLL\FootbolLigasORM.BLL.csproj", "{D386FA9D-C913-4E61-ACA4-2B07F28D721B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{9E9E6B00-566C-44FF-A243-CACBC414E2C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E9E6B00-566C-44FF-A243-CACBC414E2C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E9E6B00-566C-44FF-A243-CACBC414E2C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D386FA9D-C913-4E61-ACA4-2B07F28D721B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D386FA9D-C913-4E61-ACA4-2B07F28D721B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D386FA9D-C913-4E61-ACA4-2B07F28D721B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D386FA9D-C913-4E61-ACA4-2B07F28D721B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
